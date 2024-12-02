@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 상단 + 버튼 -->
+    <FrameLayout
+        android:id="@+id/lobby_add_button"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/blue_button">
+
+        <!-- + 아이콘 -->
+        <ImageView
+            android:id="@+id/lobby_add_icon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_plus"
+            android:contentDescription="Add Button Icon" />
+    </FrameLayout>
+
+    <!-- RecyclerView를 위한 상단 스크롤 영역 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lobby_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@id/lobby_bottom_layout"
+        app:layout_constraintTop_toBottomOf="@+id/lobby_add_button" />
+
+    <!-- 하단 고정 레이아웃 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lobby_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_layout_background"
+        android:elevation="4dp"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- 사용자 정보 -->
+        <FrameLayout
+            android:id="@+id/lobby_user_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/circle_image_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_goose"
+                android:contentDescription="건구스" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/lobby_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:text="건구스 님"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            app:layout_constraintBottom_toBottomOf="@id/lobby_user_avatar"
+            app:layout_constraintStart_toEndOf="@id/lobby_user_avatar"
+            app:layout_constraintTop_toTopOf="@id/lobby_user_avatar"
+            android:includeFontPadding="false"/>
+
+        <!-- 사용자 점수 -->
+        <TextView
+            android:id="@+id/lobby_user_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2,813 점"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/lobby_user_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/lobby_user_avatar"
+            android:includeFontPadding="false"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
