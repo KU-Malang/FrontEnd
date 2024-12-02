@@ -1,5 +1,6 @@
 package ku.network.malang
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -144,6 +145,7 @@ class LobbyActivity : AppCompatActivity() {
                         onSuccess = { message ->
                             Toast.makeText(this@LobbyActivity, "방 입장 성공: $message", Toast.LENGTH_SHORT).show()
                             MalangApplication.setRoomId(roomId) // 방 ID 설정
+                            navigateToGame()
                         },
                         onFailure = { error ->
                             Toast.makeText(this@LobbyActivity, "방 입장 실패: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
@@ -154,5 +156,11 @@ class LobbyActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "유저 정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun navigateToGame() {
+        val intent = Intent(this, GameActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

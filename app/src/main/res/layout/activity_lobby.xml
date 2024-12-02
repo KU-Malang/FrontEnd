@@ -43,7 +43,7 @@
         android:id="@+id/lobby_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_layout_background"
+        android:background="@drawable/border_top_background"
         android:elevation="4dp"
         android:paddingHorizontal="30dp"
         app:layout_constraintBottom_toBottomOf="parent">

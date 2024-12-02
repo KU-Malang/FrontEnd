@@ -1,5 +1,6 @@
 package ku.network.malang
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -72,13 +73,28 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun performLogin(nickname: String, password: String) {
-        // 비동기 작업 수행
         CoroutineScope(Dispatchers.IO).launch {
             val result = loginInteractor.performLogin(nickname, password)
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@LoginActivity, result, Toast.LENGTH_SHORT).show()
+                result.fold(
+                    onSuccess = { message ->
+                        Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
+                        navigateToLobby()
+                    },
+                    onFailure = { error ->
+                        Toast.makeText(this@LoginActivity, "로그인 실패: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        binding.loginUsernameEt.text.clear()
+                        binding.loginPasswordEt.text.clear()
+                    }
+                )
             }
         }
+    }
+
+    private fun navigateToLobby() {
+        val intent = Intent(this, LobbyActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
 }
