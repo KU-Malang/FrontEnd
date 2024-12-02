@@ -14,15 +14,20 @@ import kotlinx.coroutines.withContext
 import ku.network.malang.databinding.ActivityLobbyBinding
 import ku.network.malang.feature.lobby.CreateRoomInteractor
 import ku.network.malang.feature.lobby.CreateRoomRepository
+import ku.network.malang.feature.lobby.EnterRoomInteractor
+import ku.network.malang.feature.lobby.EnterRoomRepository
 import ku.network.malang.feature.lobby.LobbyAdapter
 import ku.network.malang.feature.lobby.LobbyInteractor
 import ku.network.malang.feature.lobby.LobbyRepository
+import ku.network.malang.model.LobbyItem
 
 class LobbyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLobbyBinding
     private lateinit var adapter: LobbyAdapter
-    private val interactor = LobbyInteractor(LobbyRepository())
+    private val lobbyInteractor = LobbyInteractor(LobbyRepository())
+    private val createRoomInteractor = CreateRoomInteractor(CreateRoomRepository())
+    private val enterRoomInteractor = EnterRoomInteractor(EnterRoomRepository())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,9 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // RecyclerView 설정
-        adapter = LobbyAdapter(mutableListOf())
+        adapter = LobbyAdapter(mutableListOf()) { lobbyItem ->
+            enterRoom(lobbyItem) // 클릭 이벤트 처리
+        }
         binding.lobbyRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@LobbyActivity)
             adapter = this@LobbyActivity.adapter
@@ -50,7 +57,7 @@ class LobbyActivity : AppCompatActivity() {
 
     private fun fetchLobbyData(userId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = interactor.fetchLobbyData(userId)
+            val result = lobbyInteractor.fetchLobbyData(userId)
             withContext(Dispatchers.Main) {
                 result.fold(
                     onSuccess = { (items, nickname, rating) ->
@@ -108,11 +115,8 @@ class LobbyActivity : AppCompatActivity() {
             return
         }
 
-        // 비동기 작업으로 방 생성 요청
         CoroutineScope(Dispatchers.IO).launch {
-            val repository = CreateRoomRepository()
-            val interactor = CreateRoomInteractor(repository)
-            val result = interactor.createRoom(roomName, maxPlayers, hostUserId, quizCount)
+            val result = createRoomInteractor.createRoom(roomName, maxPlayers, hostUserId, quizCount)
 
             withContext(Dispatchers.Main) {
                 result.fold(
@@ -125,6 +129,30 @@ class LobbyActivity : AppCompatActivity() {
                     }
                 )
             }
+        }
+    }
+
+    private fun enterRoom(lobbyItem: LobbyItem) {
+        val roomId = lobbyItem.roomId
+        val userId = MalangApplication.getUserId()
+
+        if (userId != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = enterRoomInteractor.enterRoom(userId, roomId)
+                withContext(Dispatchers.Main) {
+                    result.fold(
+                        onSuccess = { message ->
+                            Toast.makeText(this@LobbyActivity, "방 입장 성공: $message", Toast.LENGTH_SHORT).show()
+                            MalangApplication.setRoomId(roomId) // 방 ID 설정
+                        },
+                        onFailure = { error ->
+                            Toast.makeText(this@LobbyActivity, "방 입장 실패: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
+        } else {
+            Toast.makeText(this, "유저 정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -58,6 +58,7 @@ data class LobbyRepDto(
     fun toLobbyItems(): List<LobbyItem> {
         return data?.rooms?.map { room ->
             LobbyItem(
+                roomId = room.roomId,
                 title = room.roomName,
                 totalQuestions = "${room.quizCount}문제",
                 progress = "${room.currentPlayers}/${room.maxPlayers}"

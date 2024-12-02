@@ -1,6 +1,7 @@
 package ku.network.malang.network
 
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
@@ -10,32 +11,53 @@ object SocketClient {
     private const val SERVER_IP = "192.168.0.1" // 서버 IP
     private const val SERVER_PORT = 8080       // 서버 포트
 
-    // 제너릭 요청 함수
+    private var socket: Socket? = null
+    private var output: PrintWriter? = null
+    private var input: BufferedReader? = null
+
+    @Synchronized
+    private fun initializeConnection() {
+        if (socket == null || socket?.isClosed == true) {
+            socket = Socket(SERVER_IP, SERVER_PORT)
+            output = PrintWriter(OutputStreamWriter(socket!!.getOutputStream()), true)
+            input = BufferedReader(InputStreamReader(socket!!.getInputStream()))
+        }
+    }
+
     fun <T, R> sendRequest(
         request: T,
         toJson: (T) -> String,
         fromJson: (String) -> R
     ): R? {
-        var socket: Socket? = null
         return try {
-            // 서버와 연결
-            socket = Socket(SERVER_IP, SERVER_PORT)
+            // 연결 초기화 (필요 시만)
+            initializeConnection()
 
             // 요청 전송
-            val output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
-            output.println(toJson(request)) // 요청 DTO를 JSON으로 변환하여 전송
+            output?.println(toJson(request))
 
             // 응답 수신
-            val input = BufferedReader(InputStreamReader(socket.getInputStream()))
-            val responseString = input.readLine()
-
-            // JSON 응답을 DTO로 변환하여 반환
-            fromJson(responseString)
+            val responseString = input?.readLine()
+            if (responseString != null) {
+                fromJson(responseString)
+            } else {
+                null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             null
-        } finally {
+        }
+    }
+
+    @Synchronized
+    fun closeConnection() {
+        try {
             socket?.close()
+            socket = null
+            output = null
+            input = null
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 }
