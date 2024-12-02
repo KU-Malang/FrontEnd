@@ -10,34 +10,8 @@ class LobbyRepository {
         val requestDto = LobbyReqDto(userId = userId)
         return SocketClient.sendRequest(
             request = requestDto,
-            toJson = { JSONObject(mapOf("messageType" to it.messageType, "userId" to it.userId)).toString() },
-            fromJson = { responseString ->
-                val jsonObject = JSONObject(responseString)
-                val dataObject = jsonObject.optJSONObject("data")
-                LobbyRepDto(
-                    messageType = jsonObject.getInt("messageType"),
-                    status = jsonObject.getString("status"),
-                    message = jsonObject.getString("message"),
-                    data = dataObject?.let { data ->
-                        LobbyRepDto.LobbyData(
-                            nickname = data.getString("nickname"),
-                            rating = data.getInt("rating"),
-                            rooms = data.getJSONArray("rooms").let { roomsArray ->
-                                (0 until roomsArray.length()).map { index ->
-                                    val room = roomsArray.getJSONObject(index)
-                                    LobbyRepDto.LobbyRoom(
-                                        roomId = room.getInt("roomId"),
-                                        roomName = room.getString("roomName"),
-                                        quizCount = room.getInt("quizCount"),
-                                        currentPlayers = room.getInt("currentPlayers"),
-                                        maxPlayers = room.getInt("maxPlayers")
-                                    )
-                                }
-                            }
-                        )
-                    }
-                )
-            }
+            toJson = { it.toJson() },
+            fromJson = { responseString -> LobbyRepDto.fromJson(responseString) }
         )
     }
 }
