@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="300dp"
         android:background="@color/main_blue"/>
 
     <TextView
@@ -24,18 +25,103 @@
         android:layout_height="wrap_content"
         android:text="로그인 하랑말랑~"
         android:textColor="@color/white"
-        android:textSize="30dp"/>
+        android:textSize="30dp"
+        android:fontFamily="@font/bm_jua"
+        android:includeFontPadding="false"/>
 
     <ImageView
         android:id="@+id/login_duck_iv"
         app:layout_constraintBottom_toBottomOf="@id/login_top_bg"
         app:layout_constraintStart_toStartOf="@id/login_top_bg"
         app:layout_constraintEnd_toEndOf="@id/login_top_bg"
-        android:layout_width="303dp"
-        android:layout_height="197dp"
+        android:layout_width="252dp"
+        android:layout_height="161dp"
         android:src="@drawable/login_duck"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_username_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/login_top_bg"
+        app:layout_constraintStart_toStartOf="@+id/login_top_bg"
+        app:layout_constraintEnd_toEndOf="@+id/login_top_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginTop="70dp"
+        android:layout_marginHorizontal="20dp">
+
+        <!-- EditText와 글자 수를 포함하는 FrameLayout -->
+        <FrameLayout
+            android:id="@+id/login_username_input_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- 닉네임 입력 필드 -->
+            <EditText
+                android:id="@+id/login_username_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="닉네임을 입력하세요"
+                android:maxLength="7"
+                android:inputType="textPersonName"
+                android:textSize="13sp"
+                android:fontFamily="@font/noto_sans_kr_regular"
+                android:includeFontPadding="false"/>
+
+            <!-- 글자 수 표시 -->
+            <TextView
+                android:id="@+id/login_username_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/7"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:layout_gravity="end|bottom"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/noto_sans_kr_regular"
+                android:includeFontPadding="false"/>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- 설명 텍스트 -->
+    <TextView
+        android:id="@+id/login_username_hint_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최대 7자 입력이 가능합니다"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/login_username_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/login_username_input_layout"
+        android:layout_marginStart="2dp"
+        android:fontFamily="@font/noto_sans_kr_thin"
+        android:includeFontPadding="false"/>
+
+    <!-- 비밀번호 입력 필드 -->
+    <EditText
+        android:id="@+id/login_password_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="비밀번호를 입력하세요"
+        android:minHeight="48dp"
+        android:inputType="textPassword"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_username_hint_tv"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="42dp"
+        android:fontFamily="@font/noto_sans_kr_regular"
+        android:includeFontPadding="false"/>
     
     <Button
+        android:id="@+id/login_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +131,7 @@
         android:background="@drawable/blue_button"
         android:text="로그인"
         android:textColor="@color/white"
-        android:textSize="15dp"
-        android:textStyle="bold"/>
+        android:textSize="15sp"
+        android:fontFamily="@font/noto_sans_kr_bold"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

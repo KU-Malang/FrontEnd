@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    android:backgroundTint="@color/white"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <!-- 제목 -->
+        <TextView
+            android:id="@+id/lobby_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="건대생들 고고"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            android:includeFontPadding="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lobby_item_total_questions" />
+
+        <!-- 총 문제 수 -->
+        <TextView
+            android:id="@+id/lobby_item_total_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40문제"
+            android:textColor="@color/main_blue"
+            android:textSize="11sp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/lobby_item_title"
+            app:layout_constraintBottom_toBottomOf="@+id/lobby_item_title"/>
+
+        <!-- 진행 상황 -->
+        <TextView
+            android:id="@+id/lobby_item_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7/8"
+            android:textColor="@color/main_blue"
+            android:textSize="11sp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            android:layout_marginTop="2dp"
+            app:layout_constraintEnd_toEndOf="@id/lobby_item_total_questions"
+            app:layout_constraintTop_toBottomOf="@id/lobby_item_total_questions"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
