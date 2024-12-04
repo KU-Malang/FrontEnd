@@ -2,7 +2,8 @@ package ku.network.malang.model
 
 data class LobbyItem(
     val roomId: Int,
-    val title: String,
-    val totalQuestions: String,
-    val progress: String
+    val roomName: String,
+    val quizCount: Int,
+    val currentPlayers: Int,
+    val maxPlayers: Int,
 )

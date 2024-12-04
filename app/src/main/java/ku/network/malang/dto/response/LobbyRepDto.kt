@@ -1,5 +1,6 @@
 package ku.network.malang.dto.response
 
+import android.util.Log
 import ku.network.malang.model.LobbyItem
 import ku.network.malang.network.Response
 
@@ -25,6 +26,7 @@ data class LobbyRepDto(
 
     companion object {
         fun fromJson(jsonString: String): LobbyRepDto {
+            Log.d("로비 방 목록 조회", "Parsing JSON: $jsonString") // 전체 JSON 로그
             return Response.fromJson(jsonString) { jsonObject ->
                 val dataObject = jsonObject.optJSONObject("data")
                 LobbyRepDto(
@@ -59,9 +61,10 @@ data class LobbyRepDto(
         return data?.rooms?.map { room ->
             LobbyItem(
                 roomId = room.roomId,
-                title = room.roomName,
-                totalQuestions = "${room.quizCount}문제",
-                progress = "${room.currentPlayers}/${room.maxPlayers}"
+                roomName = room.roomName,
+                quizCount = room.quizCount,
+                currentPlayers = room.currentPlayers,
+                maxPlayers = room.maxPlayers
             )
         } ?: emptyList()
     }

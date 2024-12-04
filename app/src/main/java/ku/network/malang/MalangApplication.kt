@@ -1,6 +1,7 @@
 package ku.network.malang
 
 import android.app.Application
+import ku.network.malang.model.LobbyItem
 
 class MalangApplication : Application() {
 
@@ -9,7 +10,7 @@ class MalangApplication : Application() {
         private var userId: Int? = null
 
         @Volatile
-        private var roomId: Int? = null
+        private var roomInfo: LobbyItem? = null
 
         @Synchronized
         fun setUserId(id: Int) {
@@ -21,12 +22,12 @@ class MalangApplication : Application() {
         }
 
         @Synchronized
-        fun setRoomId(id: Int) {
-            roomId = id
+        fun setRoomInfo(room: LobbyItem) {
+            roomInfo = room
         }
 
-        fun getRoomId(): Int? {
-            return roomId
+        fun getRoomInfo(): LobbyItem? {
+            return roomInfo
         }
     }
 

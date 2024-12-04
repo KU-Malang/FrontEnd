@@ -4,7 +4,7 @@ import ku.network.malang.network.Request
 import org.json.JSONObject
 
 data class EnterRoomReqDto(
-    val messageType: Int = 4, // 메시지 타입 고정
+    val messageType: Int = 4,
     val userId: Int,
     val roomId: Int
 ) : Request {

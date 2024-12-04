@@ -20,9 +20,11 @@ class LobbyAdapter(
         val progress: TextView = view.findViewById(R.id.lobby_item_progress)
 
         fun bind(item: LobbyItem) {
-            title.text = item.title
-            totalQuestions.text = item.totalQuestions
-            progress.text = item.progress
+            val context = itemView.context
+
+            title.text = item.roomName
+            totalQuestions.text = context.getString(R.string.quiz_count_format, item.quizCount)
+            progress.text = context.getString(R.string.progress_format, item.currentPlayers, item.maxPlayers)
             itemView.setOnClickListener {
                 onItemClick(item)
             }
@@ -36,10 +38,7 @@ class LobbyAdapter(
     }
 
     override fun onBindViewHolder(holder: LobbyViewHolder, position: Int) {
-        val item = items[position]
-        holder.title.text = item.title
-        holder.totalQuestions.text = item.totalQuestions
-        holder.progress.text = item.progress
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size

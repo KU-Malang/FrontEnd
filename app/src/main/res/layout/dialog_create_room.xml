@@ -136,16 +136,16 @@
     <!-- 문제 수 힌트 -->
     <TextView
         android:id="@+id/create_room_questions_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4-8인"
-        android:textSize="10sp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/create_room_questions_et"
-        app:layout_constraintTop_toBottomOf="@id/create_room_questions_et"
+        android:layout_width="16dp"
+        android:layout_height="12dp"
         android:layout_marginStart="2dp"
         android:fontFamily="@font/noto_sans_kr_thin"
-        android:includeFontPadding="false"/>
+        android:includeFontPadding="false"
+        android:text="10-50문제"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@id/create_room_questions_et"
+        app:layout_constraintTop_toBottomOf="@id/create_room_questions_et" />
 
     <!-- 만들기 버튼 -->
     <Button
