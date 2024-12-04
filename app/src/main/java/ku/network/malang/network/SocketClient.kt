@@ -11,7 +11,7 @@ import java.net.Socket
 object SocketClient {
     private const val SERVER_IP = "43.200.215.241"
     private const val SERVER_PORT = 8080
-    private const val TIMEOUT = 5000 // 5초 대기
+    private const val TIMEOUT = 15000
 
     private var socket: Socket? = null
     private var output: PrintWriter? = null
@@ -50,6 +50,7 @@ object SocketClient {
 
             val responseString = input?.readLine()
             if (responseString != null) {
+                Log.d("응답 수신", "응답 데이터: ${fromJson(responseString)}")
                 fromJson(responseString)
             } else {
                 Log.e("SocketClient", "서버 응답이 null입니다.")

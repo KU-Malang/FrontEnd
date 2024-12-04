@@ -4,7 +4,7 @@ import ku.network.malang.network.Request
 import org.json.JSONObject
 
 data class CreateRoomReqDto(
-    val messageType: Int = 1,
+    val messageType: Int = 2,
     val roomName: String,
     val maxPlayers: Int,
     val hostUserId: Int,

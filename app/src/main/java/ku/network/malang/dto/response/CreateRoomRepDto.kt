@@ -6,7 +6,7 @@ data class CreateRoomRepDto(
     val messageType: Int,
     val status: String,
     val message: String,
-    val roomId: Int?
+    val roomId: Int
 ) : Response {
     companion object {
         fun fromJson(jsonString: String): CreateRoomRepDto {
@@ -16,7 +16,7 @@ data class CreateRoomRepDto(
                     messageType = jsonObject.getInt("messageType"),
                     status = jsonObject.getString("status"),
                     message = jsonObject.getString("message"),
-                    roomId = data?.optInt("roomId")
+                    roomId = data?.optInt("roomId") ?: 0
                 )
             }
         }
