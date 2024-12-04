@@ -81,6 +81,9 @@ class LobbyActivity : AppCompatActivity() {
             .setView(dialogView)
             .create()
 
+        // 다이얼로그 배경 적용
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+
         // 다이얼로그 내부 뷰 참조
         val roomNameEditText: EditText = dialogView.findViewById(R.id.create_room_name_et)
         val playersEditText: EditText = dialogView.findViewById(R.id.create_room_players_et)
