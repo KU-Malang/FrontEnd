@@ -23,7 +23,7 @@ class GameActivity : AppCompatActivity() {
         )
 
         // RecyclerView 설정
-        val recyclerView: RecyclerView = findViewById(R.id.game_waiting_player_list)
+        val recyclerView: RecyclerView = findViewById(R.id.game_player_list)
         recyclerView.layoutManager = GridLayoutManager(this, 4)
         recyclerView.adapter = PlayerAdapter(players)
     }
