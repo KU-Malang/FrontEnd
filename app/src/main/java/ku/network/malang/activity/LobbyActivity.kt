@@ -1,4 +1,4 @@
-package ku.network.malang
+package ku.network.malang.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ku.network.malang.MalangApplication
+import ku.network.malang.R
 import ku.network.malang.databinding.ActivityLobbyBinding
 import ku.network.malang.feature.lobby.CreateRoomInteractor
 import ku.network.malang.feature.lobby.CreateRoomRepository
