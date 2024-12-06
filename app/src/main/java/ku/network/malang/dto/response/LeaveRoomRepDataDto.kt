@@ -5,9 +5,8 @@ import org.json.JSONObject
 data class LeaveRoomRepDataDto(
     val roomName: String,
     val hostUser: String,
-    val userList: List<User>
+    val userList: List<EnterRoomRepDataDto.User>
 ) {
-    data class User(val userName: String)
     companion object {
         fun fromJson(data: JSONObject): LeaveRoomRepDataDto {
             return LeaveRoomRepDataDto(
@@ -16,7 +15,7 @@ data class LeaveRoomRepDataDto(
                 userList = data.getJSONArray("userList").let { arr ->
                     (0 until arr.length()).map { idx ->
                         val userName = arr.getJSONObject(idx)
-                        User(
+                        EnterRoomRepDataDto.User(
                             userName = userName.getString("userName")
                         )
                     }

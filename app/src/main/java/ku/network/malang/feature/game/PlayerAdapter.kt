@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ku.network.malang.R
+import ku.network.malang.dto.response.EnterRoomRepDataDto
 
-class PlayerAdapter(private val players: List<String>) :
+class PlayerAdapter(private var players: List<EnterRoomRepDataDto.User>) :
     RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder>() {
 
     inner class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,8 +21,17 @@ class PlayerAdapter(private val players: List<String>) :
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.playerName.text = players[position]
+        if (position < players.size)
+            holder.playerName.text = players[position].userName
+        else
+            holder.playerName.text = ""
     }
 
-    override fun getItemCount(): Int = players.size
+    override fun getItemCount(): Int = 8
+
+    fun updatePlayers(newPlayers: List<EnterRoomRepDataDto.User>) {
+        players = newPlayers
+        notifyDataSetChanged()
+    }
+
 }

@@ -89,4 +89,8 @@ class BroadcastReceiver {
         )
     }
 
+    fun setBroadcastListener(listener: BroadcastListener) {
+        broadcastListener = listener
+    }
+
 }

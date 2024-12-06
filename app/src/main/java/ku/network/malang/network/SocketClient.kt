@@ -50,6 +50,7 @@ object SocketClient {
 
             val responseString = input?.readLine()
             if (responseString != null) {
+                Log.d("response", "sendRequest: $responseString")
                 Log.d("응답 수신", "응답 데이터: ${fromJson(responseString)}")
                 fromJson(responseString)
             } else {

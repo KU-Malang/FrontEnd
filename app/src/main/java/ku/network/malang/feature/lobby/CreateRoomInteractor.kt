@@ -1,5 +1,7 @@
 package ku.network.malang.feature.lobby
 
+import android.util.Log
+
 class CreateRoomInteractor(private val repository: CreateRoomRepository) {
     fun createRoom(
         roomName: String,

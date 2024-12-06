@@ -129,7 +129,7 @@ class LobbyActivity : AppCompatActivity() {
                     onSuccess = { (roomId, message) ->
                         Toast.makeText(this@LobbyActivity, message, Toast.LENGTH_SHORT).show()
                         fetchLobbyData(hostUserId)
-                        enterRoom(LobbyItem(roomId, roomName,  quizCount, 1, maxPlayers))
+                        enterRoom(LobbyItem(roomId, roomName,  quizCount, 1, maxPlayers, ArrayList(), true))
                     },
                     onFailure = { error ->
                         Toast.makeText(this@LobbyActivity, error.localizedMessage, Toast.LENGTH_SHORT).show()
@@ -147,8 +147,9 @@ class LobbyActivity : AppCompatActivity() {
                 val result = enterRoomInteractor.enterRoom(userId, lobbyItem.roomId)
                 withContext(Dispatchers.Main) {
                     result.fold(
-                        onSuccess = { message ->
-                            Toast.makeText(this@LobbyActivity, "방 입장 성공: $message", Toast.LENGTH_SHORT).show()
+                        onSuccess = { data ->
+                            Toast.makeText(this@LobbyActivity, "방 입장 성공", Toast.LENGTH_SHORT).show()
+                            lobbyItem.playerList.addAll(data.userList)
                             MalangApplication.setRoomInfo(lobbyItem) //방 정보 저장
                             navigateToGame()
                         },
@@ -166,6 +167,5 @@ class LobbyActivity : AppCompatActivity() {
     private fun navigateToGame() {
         val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
-        finish()
     }
 }

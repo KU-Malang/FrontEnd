@@ -1,5 +1,6 @@
 package ku.network.malang.dto.response
 
+import android.util.Log
 import ku.network.malang.network.Response
 
 data class CreateRoomRepDto(
@@ -10,6 +11,7 @@ data class CreateRoomRepDto(
 ) : Response {
     companion object {
         fun fromJson(jsonString: String): CreateRoomRepDto {
+            Log.d("응답 방 생성", "fromJson: $jsonString")
             return Response.fromJson(jsonString) { jsonObject ->
                 val data = jsonObject.optJSONObject("data")
                 CreateRoomRepDto(
