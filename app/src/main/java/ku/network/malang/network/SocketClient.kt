@@ -63,6 +63,45 @@ object SocketClient {
         }
     }
 
+    fun <T> sendRequestOnly(
+        request: T,
+        toJson: (T) -> String
+    ) {
+        try {
+            initializeConnection()
+            if (output == null || socket?.isClosed == true) {
+                throw IOException("소켓이 열려 있지 않거나 출력 스트림이 null입니다.")
+            }
+            output?.println(toJson(request))
+            Log.d("요청 전송", "전송 데이터: ${toJson(request)}")
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("SocketClient", "요청 처리 실패: ${e.message}")
+        }
+    }
+
+    fun startListening(onMessageReceived: (String) -> Unit, onDisconnected: () -> Unit) {
+        Thread {
+            try {
+                initializeConnection()
+                while (true) {
+                    val message = input?.readLine()
+                    if (message != null) {
+                        Log.d("브로드캐스트 수신", "수신 데이터: $message")
+                        onMessageReceived(message)
+                    } else {
+                        Log.e("SocketClient", "연결 끊어짐")
+                        onDisconnected()
+                        break
+                    }
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Log.e("SocketClient", "브로드캐스트 수신 실패: ${e.message}")
+            }
+        }.start()
+    }
+
     @Synchronized
     fun closeConnection() {
         try {
@@ -77,5 +116,9 @@ object SocketClient {
             output = null
             input = null
         }
+    }
+
+    fun startListening(onDisconnected: () -> Unit) {
+
     }
 }
