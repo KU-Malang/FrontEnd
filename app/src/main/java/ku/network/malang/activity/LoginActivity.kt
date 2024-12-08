@@ -1,4 +1,4 @@
-package ku.network.malang
+package ku.network.malang.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,16 +12,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ku.network.malang.R
 import ku.network.malang.databinding.ActivityLoginBinding
-import ku.network.malang.dto.request.LoginReqDto
-import ku.network.malang.dto.response.LoginRepDto
 import ku.network.malang.feature.login.LoginInteractor
 import ku.network.malang.feature.login.LoginRepository
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
-import java.net.Socket
 
 class LoginActivity : AppCompatActivity() {
 

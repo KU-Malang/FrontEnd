@@ -64,7 +64,9 @@ data class LobbyRepDto(
                 roomName = room.roomName,
                 quizCount = room.quizCount,
                 currentPlayers = room.currentPlayers,
-                maxPlayers = room.maxPlayers
+                maxPlayers = room.maxPlayers,
+                playerList = ArrayList(),
+                isHost = false
             )
         } ?: emptyList()
     }

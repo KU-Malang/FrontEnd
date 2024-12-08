@@ -1,13 +1,15 @@
 package ku.network.malang.feature.game
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ku.network.malang.R
+import ku.network.malang.dto.response.EnterRoomRepDataDto
 
-class PlayerAdapter(private val players: List<String>) :
+class PlayerAdapter(var players: List<EnterRoomRepDataDto.User>) :
     RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder>() {
 
     inner class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,8 +22,21 @@ class PlayerAdapter(private val players: List<String>) :
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.playerName.text = players[position]
+        if (position < players.size) {
+            if(!players[position].isActivated) {
+                holder.playerName.setTextColor(Color.parseColor("#A8A8A8"))
+            }
+            holder.playerName.text = players[position].userName
+        }
+        else
+            holder.playerName.text = ""
     }
 
-    override fun getItemCount(): Int = players.size
+    override fun getItemCount(): Int = 8
+
+    fun updatePlayers(newPlayers: List<EnterRoomRepDataDto.User>) {
+        players = newPlayers
+        notifyDataSetChanged()
+    }
+
 }

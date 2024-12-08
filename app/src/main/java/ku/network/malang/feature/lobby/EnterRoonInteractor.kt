@@ -1,12 +1,14 @@
 package ku.network.malang.feature.lobby
 
+import ku.network.malang.dto.response.EnterRoomRepDataDto
+
 class EnterRoomInteractor(private val repository: EnterRoomRepository) {
-    fun enterRoom(userId: Int, roomId: Int): Result<String> {
+    fun enterRoom(userId: Int, roomId: Int): Result<EnterRoomRepDataDto> {
         val response = repository.enterRoom(userId, roomId)
 
         return if (response != null) {
             when (response.status) {
-                "success" -> Result.success(response.message) // 성공 메시지
+                "success" -> Result.success(response.data) // 성공 메시지
                 else -> Result.failure(Exception("방 입장 실패: ${response.message}"))
             }
         } else {

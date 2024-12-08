@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/item_wrong_answer_nickname"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:textSize="15dp"
@@ -14,6 +15,7 @@
         android:includeFontPadding="false"/>
 
     <TextView
+        android:id="@+id/item_wrong_answer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
