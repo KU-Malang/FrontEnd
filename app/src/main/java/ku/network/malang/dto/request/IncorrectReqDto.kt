@@ -3,16 +3,18 @@ package ku.network.malang.dto.request
 import ku.network.malang.network.Request
 import org.json.JSONObject
 
-data class NewQuizReqDto(
-    val messageType: Int = 6,
+data class IncorrectReqDto(
+    val messageType: Int = 8,
     val roomId: Int,
-    val quizType: String
+    val userId: Int,
+    val wrongAnswer: String
 ) : Request {
     override fun toJson(): String {
         return JSONObject().apply {
             put("messageType", messageType)
             put("roomId", roomId)
-            put("quizType", quizType)
+            put("userId", userId)
+            put("wrongAnswer", wrongAnswer)
         }.toString()
     }
 }

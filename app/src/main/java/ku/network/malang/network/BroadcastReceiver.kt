@@ -89,6 +89,10 @@ class BroadcastReceiver {
         )
     }
 
+    fun stopListening() {
+        SocketClient.stopListening()
+    }
+
     fun setBroadcastListener(listener: BroadcastListener) {
         broadcastListener = listener
     }

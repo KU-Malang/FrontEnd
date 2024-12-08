@@ -19,6 +19,9 @@ class MalangApplication : Application() {
         private var userId: Int? = null
 
         @Volatile
+        var userNickname: String? = null
+
+        @Volatile
         private var roomInfo: LobbyItem? = null
 
         @Volatile

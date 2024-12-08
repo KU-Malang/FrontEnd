@@ -7,7 +7,7 @@ data class EnterRoomRepDataDto (
     val roomName: String,
     val userList: List<User>
 ) {
-    data class User(val userName: String)
+    data class User(val userName: String, var score: Int = 0, var isActivated: Boolean = true)
     companion object {
         fun fromJson(data: JSONObject): EnterRoomRepDataDto {
             return EnterRoomRepDataDto(

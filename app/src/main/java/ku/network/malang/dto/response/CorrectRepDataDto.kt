@@ -3,13 +3,13 @@ package ku.network.malang.dto.response
 import org.json.JSONObject
 
 data class CorrectRepDataDto(
-    val userId: Int,
+    val userNickname: String,
     val correctAnswer: String
 ) {
     companion object {
         fun fromJson(data: JSONObject): CorrectRepDataDto {
             return CorrectRepDataDto(
-                userId = data.getInt("userId"),
+                userNickname = data.getString("userNickname"),
                 correctAnswer = data.getString("correctAnswer")
             )
         }

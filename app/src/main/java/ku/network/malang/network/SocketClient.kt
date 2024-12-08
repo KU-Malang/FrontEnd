@@ -7,6 +7,8 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.net.Socket
+import java.net.SocketTimeoutException
+import java.util.concurrent.TimeoutException
 
 object SocketClient {
     private const val SERVER_IP = "43.200.215.241"
@@ -16,6 +18,7 @@ object SocketClient {
     private var socket: Socket? = null
     private var output: PrintWriter? = null
     private var input: BufferedReader? = null
+    private var bdThread: Thread? = null
 
     @Synchronized
     private fun initializeConnection() {
@@ -82,25 +85,38 @@ object SocketClient {
     }
 
     fun startListening(onMessageReceived: (String) -> Unit, onDisconnected: () -> Unit) {
-        Thread {
+        bdThread = Thread {
             try {
-                initializeConnection()
+                initializeConnection() // 연결 초기화
                 while (true) {
-                    val message = input?.readLine()
-                    if (message != null) {
-                        Log.d("브로드캐스트 수신", "수신 데이터: $message")
-                        onMessageReceived(message)
-                    } else {
-                        Log.e("SocketClient", "연결 끊어짐")
+                    try {
+                        val message = input?.readLine()
+                        if (message != null) {
+                            Log.d("브로드캐스트 수신", "수신 데이터: $message")
+                            onMessageReceived(message)
+                        } else {
+                            Log.e("SocketClient", "서버와의 연결이 끊어졌습니다.")
+                            onDisconnected()
+                            break
+                        }
+                    } catch (e: SocketTimeoutException) {
+                        Log.w("SocketClient", "타임아웃 발생, 계속 대기 중: ${e.message}")
+                    } catch (e: IOException) {
+                        Log.e("SocketClient", "입출력 오류 발생: ${e.message}")
                         onDisconnected()
                         break
                     }
                 }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Log.e("SocketClient", "브로드캐스트 수신 실패: ${e.message}")
+            } catch (e: Exception) {
+                Log.e("SocketClient", "예외 발생: ${e.message}")
+                onDisconnected()
             }
-        }.start()
+        }
+        bdThread?.start()
+    }
+
+    fun stopListening() {
+        bdThread?.interrupt()
     }
 
     @Synchronized
@@ -119,7 +135,4 @@ object SocketClient {
         }
     }
 
-    fun startListening(onDisconnected: () -> Unit) {
-
-    }
 }

@@ -1,5 +1,6 @@
 package ku.network.malang.feature.game
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ku.network.malang.R
 import ku.network.malang.dto.response.EnterRoomRepDataDto
 
-class PlayerAdapter(private var players: List<EnterRoomRepDataDto.User>) :
+class PlayerAdapter(var players: List<EnterRoomRepDataDto.User>) :
     RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder>() {
 
     inner class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -21,8 +22,12 @@ class PlayerAdapter(private var players: List<EnterRoomRepDataDto.User>) :
     }
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        if (position < players.size)
+        if (position < players.size) {
+            if(!players[position].isActivated) {
+                holder.playerName.setTextColor(Color.parseColor("#A8A8A8"))
+            }
             holder.playerName.text = players[position].userName
+        }
         else
             holder.playerName.text = ""
     }

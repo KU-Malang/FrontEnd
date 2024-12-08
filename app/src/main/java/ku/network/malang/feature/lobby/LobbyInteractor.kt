@@ -1,5 +1,6 @@
 package ku.network.malang.feature.lobby
 
+import ku.network.malang.MalangApplication.Companion.userNickname
 import ku.network.malang.model.LobbyItem
 
 class LobbyInteractor(private val repository: LobbyRepository) {
@@ -10,6 +11,7 @@ class LobbyInteractor(private val repository: LobbyRepository) {
             when (response.status) {
                 "success" -> {
                     val nickname = response.getNickname() // 확장 함수 사용
+                    userNickname = nickname
                     val rating = response.getRating()     // 확장 함수 사용
                     val lobbyItems = response.toLobbyItems()
                     Result.success(Triple(lobbyItems, nickname, rating))

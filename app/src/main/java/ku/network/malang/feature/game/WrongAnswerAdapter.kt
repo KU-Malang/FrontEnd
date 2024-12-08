@@ -39,4 +39,9 @@ class WrongAnswerAdapter : RecyclerView.Adapter<WrongAnswerAdapter.WrongAnswerVi
         notifyItemInserted(messages.size - 1)
     }
 
+    fun clearMessage() {
+        messages.clear()
+        notifyDataSetChanged()
+    }
+
 }

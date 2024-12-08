@@ -15,8 +15,13 @@ class TimerDialog(context: Context, private val type: Type, private val content:
         ANSWER, HINT
     }
 
+    interface OnTimeOutListener {
+        fun timeOut()
+    }
+
     private lateinit var binding: DialogTimerBinding
     private val title = arrayOf("문제가 풀렸다", "힌트 나가신다")
+    private var onTimeOutListener : OnTimeOutListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +30,8 @@ class TimerDialog(context: Context, private val type: Type, private val content:
         window?.setLayout(380.dpToPx(context), 384.dpToPx(context))
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window!!.setDimAmount(0.6f)
-        setCancelable(false)
+        if(type == Type.ANSWER)
+            setCancelable(false)
 
         binding.dialogTimerTitle.text = title[type.ordinal]
         binding.dialogTimerContent.text = content
@@ -43,6 +49,7 @@ class TimerDialog(context: Context, private val type: Type, private val content:
                     secondsRemaining--
                     handler.postDelayed(this, 1000)
                 } else {
+                    onTimeOutListener?.timeOut()
                     dismiss()
                 }
             }
@@ -52,6 +59,10 @@ class TimerDialog(context: Context, private val type: Type, private val content:
 
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
+    }
+
+    fun setOnTimeOutListener(listener: OnTimeOutListener) {
+        onTimeOutListener = listener
     }
 
 }
