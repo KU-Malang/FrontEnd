@@ -1,6 +1,7 @@
 package ku.network.malang.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +63,8 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.headerGameTitle.text = getRoomInfo()!!.roomName
+
         // RecyclerView 설정
         binding.gamePlayerList.layoutManager = GridLayoutManager(this, 4)
         binding.gamePlayerList.adapter = getRoomInfo()?.let { PlayerAdapter(it.playerList) }
@@ -107,16 +110,19 @@ class GameActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (data == null) Toast.makeText(this@GameActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
                     else {
+                        quizType = QuizType.getQuizType(data.topic)!!
                         val dialog = InformationDialog(this@GameActivity, InformationDialog.Type.GAME_START, QuizType.getQuizType(data.topic)?.koreanName)
                         dialog.show()
-                        CoroutineScope(Dispatchers.IO).launch {
-                            SocketClient.sendRequestOnly(
-                                request = NewQuizReqDto(
-                                    roomId = getRoomInfo()!!.roomId,
-                                    quizType = data.topic
-                                ),
-                                toJson = { it.toJson() }
-                            )
+                        if(getRoomInfo()!!.isHost) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                SocketClient.sendRequestOnly(
+                                    request = NewQuizReqDto(
+                                        roomId = getRoomInfo()!!.roomId,
+                                        quizType = data.topic
+                                    ),
+                                    toJson = { it.toJson() }
+                                )
+                            }
                         }
                     }
                 }
@@ -205,8 +211,18 @@ class GameActivity : AppCompatActivity() {
         val dialog = TimerDialog(this, TimerDialog.Type.ANSWER, "정답은 ${data.correctAnswer}입니다")
         dialog.setOnTimeOutListener(object : TimerDialog.OnTimeOutListener {
             override fun timeOut() {
+                Log.d("afterCorrect", "$currentQuizIndex, ${getRoomInfo()?.quizCount}")
                 if(currentQuizType == QuizType.PRACTICE) {
                     if(userNickname == data.userNickname) selectTopic()
+                    return
+                }
+                if(currentQuizIndex == getRoomInfo()?.quizCount) {
+                    if(getRoomInfo()!!.isHost)
+                        gameOver()
+                    return
+                }
+                if(currentQuizIndex == getRoomInfo()!!.quizCount / 2) {
+                    redemption()
                     return
                 }
                 if(currentQuizType == QuizType.REDEMPTION) {
@@ -216,24 +232,17 @@ class GameActivity : AppCompatActivity() {
                         }
                     }
                     binding.gamePlayerList.adapter?.notifyDataSetChanged()
-                    return
                 }
-                if(currentQuizIndex == getRoomInfo()?.quizCount) {
-                    gameOver()
-                    return
-                }
-                if(currentQuizIndex == getRoomInfo()!!.quizCount / 2) {
-                    redemption()
-                    return
-                }
-                CoroutineScope(Dispatchers.IO).launch {
-                    SocketClient.sendRequestOnly(
-                        request = NewQuizReqDto(
-                            roomId = getRoomInfo()!!.roomId,
-                            quizType = quizType.toString()
-                        ),
-                        toJson = { it.toJson() }
-                    )
+                if(getRoomInfo()!!.isHost) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        SocketClient.sendRequestOnly(
+                            request = NewQuizReqDto(
+                                roomId = getRoomInfo()!!.roomId,
+                                quizType = quizType.toString()
+                            ),
+                            toJson = { it.toJson() }
+                        )
+                    }
                 }
             }
         })
@@ -255,14 +264,16 @@ class GameActivity : AppCompatActivity() {
 
         val dialog = InformationDialog(this, InformationDialog.Type.CONSOLATION_MATCH_START, null)
         dialog.show()
-        CoroutineScope(Dispatchers.IO).launch {
-            SocketClient.sendRequestOnly(
-                request = NewQuizReqDto(
-                    roomId = getRoomInfo()!!.roomId,
-                    quizType = QuizType.REDEMPTION.toString()
-                ),
-                toJson = { it.toJson() }
-            )
+        if(getRoomInfo()!!.isHost) {
+            CoroutineScope(Dispatchers.IO).launch {
+                SocketClient.sendRequestOnly(
+                    request = NewQuizReqDto(
+                        roomId = getRoomInfo()!!.roomId,
+                        quizType = QuizType.REDEMPTION.toString()
+                    ),
+                    toJson = { it.toJson() }
+                )
+            }
         }
     }
 
@@ -286,14 +297,16 @@ class GameActivity : AppCompatActivity() {
         val dialog = InformationDialog(this, InformationDialog.Type.PRACTICE_QUIZ, null)
         dialog.show()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            SocketClient.sendRequestOnly(
-                request = NewQuizReqDto(
-                    roomId = getRoomInfo()!!.roomId,
-                    quizType = QuizType.PRACTICE.toString()
-                ),
-                toJson = { it.toJson() }
-            )
+        if(getRoomInfo()!!.isHost) {
+            CoroutineScope(Dispatchers.IO).launch {
+                SocketClient.sendRequestOnly(
+                    request = NewQuizReqDto(
+                        roomId = getRoomInfo()!!.roomId,
+                        quizType = QuizType.PRACTICE.toString()
+                    ),
+                    toJson = { it.toJson() }
+                )
+            }
         }
     }
 
@@ -414,14 +427,21 @@ class GameActivity : AppCompatActivity() {
                     val dialog = TimerDialog(this, TimerDialog.Type.HINT, currentQuiz!!.hint!!)
                     dialog.show()
                 } else if (it == 0) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        SocketClient.sendRequestOnly(
-                            request = NewQuizReqDto(
-                                roomId = getRoomInfo()!!.roomId,
-                                quizType = quizType.toString()
-                            ),
-                            toJson = { it.toJson() }
-                        )
+                    if(currentQuizIndex == getRoomInfo()!!.quizCount / 2) {
+                        redemption()
+                    } else if(currentQuizIndex == getRoomInfo()!!.quizCount) {
+                        if(getRoomInfo()!!.isHost)
+                            gameOver()
+                    } else {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            SocketClient.sendRequestOnly(
+                                request = NewQuizReqDto(
+                                    roomId = getRoomInfo()!!.roomId,
+                                    quizType = quizType.toString()
+                                ),
+                                toJson = { it.toJson() }
+                            )
+                        }
                     }
                 }
             }

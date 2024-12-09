@@ -13,7 +13,7 @@ class GameOverAdapter(private val items: List<GameResultRepDataDto.User>) : Recy
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             if(position + 1 < items.size) {
-                binding.dialogGameOverIdx.text = (position + 2).toString()
+                binding.dialogGameOverIdx.text = (position + 2).toString() + "위"
                 binding.dialogGameOverNickname.text = items[position + 1].nickname
                 binding.dialogGameOverChange.text = items[position + 1].change
                 if(items[position + 1].change[0] == '+')
